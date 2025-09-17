@@ -20,3 +20,6 @@ This adds up to ~ 26 Tb memory for a 0.5 T param model. Grad checkpointing surel
 ### Compute Efficieny
 A smaller batch size training procedure suffers from a lower arithmetic intensity of the setup + noisy updates lead to worse performance. [See](https://arxiv.org/pdf/2310.03693) fig 5a.
 There are still some [generalization issues](https://openreview.net/pdf?id=H1oyRlYgg) with choosing a larger batch size. 
+
+<img width="443" height="657" alt="image" src="https://github.com/user-attachments/assets/3382da57-8f85-4cab-a6ef-42b99433ccc8" />
+
