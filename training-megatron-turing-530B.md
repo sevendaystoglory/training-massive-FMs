@@ -8,7 +8,7 @@ A. How do you fit a monster of this size on a single card? Spoiler: You don't! T
 B. The sheer amount of training data would render the training time years! How do you optimize that? Is it a really, really large effective batch size using model parallelism? This would require oh so many GPUs!
 
 ## Challenges
-### Memory Efficieny
+### Memory Efficiency
 In mixed preci training, each parameter requries 20 bytes of memory. (2 + 4) for model, (2 + 4) for grads and (4 + 4) for adam states. Following is from the ICLR 2018 Mixed Preci paper.
 
 <img width="625" height="328" alt="image" src="https://github.com/user-attachments/assets/dd8b06ec-2bfc-4d05-8115-31ad3512c529" />
@@ -21,5 +21,6 @@ This adds up to ~ 26 Tb memory for a 0.5 T param model. Grad checkpointing surel
 A smaller batch size training procedure suffers from a lower arithmetic intensity of the setup + noisy updates lead to worse performance. [See](https://arxiv.org/pdf/2310.03693) fig 5a.
 There are still some [generalization issues](https://openreview.net/pdf?id=H1oyRlYgg) with choosing a larger batch size. 
 
-<img width="443" height="657" alt="image" src="https://github.com/user-attachments/assets/3382da57-8f85-4cab-a6ef-42b99433ccc8" />
+<img width="439" height="644" alt="image" src="https://github.com/user-attachments/assets/931e3728-ce37-451f-aaae-1d10fb6ac5b8" />
+
 
