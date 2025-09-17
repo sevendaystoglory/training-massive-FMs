@@ -10,5 +10,5 @@ B. The sheer amount of training data would render the training time years! How d
 ## Challenges
 ### Memory Efficieny
 In mixed preci training, each parameter requries 20 bytes of memory. (2 + 4) for model, (2 + 4) for grads and (4 + 4) for adam states. 
-<img width="625" height="328" alt="image" src="https://github.com/user-attachments/assets/dd8b06ec-2bfc-4d05-8115-31ad3512c529" />
-Figure 1. from the ICLR 2018 Mixed Preci paper. [^1]
+<img width="625" height="328" alt="image" src="https://github.com/user-attachments/assets/dd8b06ec-2bfc-4d05-8115-31ad3512c529" /> [^1]
+[^1] : From the ICLR 2018 Mixed Preci paper.
