@@ -27,3 +27,16 @@ There are still some [generalization issues](https://openreview.net/pdf?id=H1oyR
 ## Proposed Software: 3D Paralleism
 Combines tensor, pipeline and data parallelism. Tensor parallel components have the highest memory bandwidth overhead, as each sequential unit has to wait for the previous one before proceeding to any form of computation. Hence, these parameters are placed within a node of 8xA100. Each stage of the pipeline is distributed across 35 nodes of A100, these may very well constitute distinct transformer blocks. Now, the 3D parallel further distributes the model across more such 35 node units for additional data parallelism. 
 
+
+---
+
+# Related Work
+### [Measuring the Effects of Data Parallelism on Neural Network Training – JMLR, 2019](https://arxiv.org/pdf/1811.03600)
+Shows the following:
+1. Increasing the batch size (BS) proportionally reduces the steps required to produce an out-of-sample error (test error) withing certain bounds. However, this does not hold true for very large BS, as you'd need more steps. A trainin run of BS = 2 at 40k steps may produce similar out-of-sample error as a trianing run with BS = 4 with 20k steps, but intuitively we can see that a BS = 80k would surely not converge in a single step!
+2. Maximum useful BS = f(workload, properties of model, training algo, dataset).
+   2.a. SGD + momentum can tolerate much higher BS than SGD.
+   2.b. some models allow for much larger BS.
+   2.c. effect of dataset on maximum useful BS is much lower than the effect of model and trianing algorithm.
+3. Popular LR heuristics such as linearly scaling LR with BS does not hold across all BS or models.
+4. Answer the 1M$ question - does increasing BS adversely affect trained model quality? They show no such evidence is found. Yet certain regularization techniques become imperative at high BS. This, atleast, partially reconciles the conflicting stances in the then-prevalent literature that increasing BS degrades model quality. 
