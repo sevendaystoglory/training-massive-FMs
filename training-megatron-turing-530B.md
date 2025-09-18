@@ -32,7 +32,7 @@ Combines tensor, pipeline and data parallelism. Tensor parallel components have 
 
 # Related Work
 ### [Measuring the Effects of Data Parallelism on Neural Network Training – JMLR, 2019](https://arxiv.org/pdf/1811.03600)
-Shows the following:
+I'll briefly summarize the main contirbutions of this paper:
 1. Increasing the batch size (BS) proportionally reduces the steps required to produce an out-of-sample error (test error) withing certain bounds. However, this does not hold true for very large BS, as you'd need more steps. A trainin run of BS = 2 at 40k steps may produce similar out-of-sample error as a trianing run with BS = 4 with 20k steps, but intuitively we can see that a BS = 80k would surely not converge in a single step!
 2. Maximum useful BS = f(workload, properties of model, training algo, dataset).
    2.a. SGD + momentum can tolerate much higher BS than SGD.
