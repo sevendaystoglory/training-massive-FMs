@@ -20,6 +20,34 @@ After stage 1, quite a strong video encoder is trained. However, this is still n
 2. **Stage2: Aligning Video to Audio-Speech-Text.** How we do this is done is that there already are good text/audio/speech encoders. We take the the BERT-L (19 encoder layers and 5 cross-attn decoder layers) for text and speech encoding. The audio encoder is initialized with BEATs. Good! What remains now is to align these cross-modal representations. This is done in 3 ways: A. using a contrastive loss to learn similar M-text embeddings, where $M\in\{video, audio, speech\}$. Call this $L_{CON}$; B. computing a loss $L_{MAT}$ which captures the likelihood of matching a given video $V$ with a caption $T$; C. Up until now the encoder layers of BERT-L were trained. We now unleash the cross-attn decoder of BERT. Given a video, and some of its caption, we train the BERT-L to complete the caption. This is autoregressive LM task. I don't know why they've called it masked language modelling 🤷. With this the final piece of loss is $L_{MLM}$. Henceforth, stage 2 loss is
 
 $$
-L = L_{CON} + L_{MAT} + L_{MLM}
+L = L_{CON} + L_{MAT} + L_{MLM}; \quad where
 $$
+
+$$
+\mathcal{L}_{\mathrm{CON}}
+= \sum_{M,T_{M'}} \mathcal{L}_{\mathrm{CON}}(M,T_{M'})
+= - \sum_{M,T_{M'}} \left(
+\sum_{i=1}^{N} \log
+\frac{\exp\!\left(\mathrm{sim}\!\left(f^{M}_{i},\, f^{T_{M'}}_{i}\right)/\tau\right)}
+{\sum_{j=1}^{N} \exp\!\left(\mathrm{sim}\!\left(f^{M}_{i},\, f^{T_{M'}}_{j}\right)/\tau\right)}
++\sum_{i=1}^{N} \log
+\frac{\exp\!\left(\mathrm{sim}\!\left(f^{T_{M'}}_{i},\, f^{M}_{i}\right)/\tau\right)}
+{\sum_{j=1}^{N} \exp\!\left(\mathrm{sim}\!\left(f^{T_{M'}}_{i},\, f^{M}_{j}\right)/\tau\right)}
+\right)
+$$
+
+$$
+\mathcal{L}_{\mathrm{MAC}}
+= -\, y \,\log f_p(\mathbf{V},\mathbf{T})
+- (1-y)\,\log\!\big(1 - f_p(\mathbf{V},\mathbf{T})\big)
+$$
+
+$$
+\mathcal{L}_{\mathrm{MLM}}
+= - \log f^{T}_{p}\!\left(T_j \mid T_{<j}\right)
+$$
+
+Furthermore, the audio-video-speech representations can be turned to captions using the BERT decoder. They are calling it VidCap.
+
+<img width="888" height="358" alt="image" src="https://github.com/user-attachments/assets/c03ab76c-0b35-4d71-8e9b-312b2b9e477d" />
 
