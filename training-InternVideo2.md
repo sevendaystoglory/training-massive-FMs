@@ -37,17 +37,13 @@ $$
 $$
 
 $$
-\mathcal{L}_{\mathrm{MAC}}
-= -\, y \,\log f_p(\mathbf{V},\mathbf{T})
-- (1-y)\,\log\!\big(1 - f_p(\mathbf{V},\mathbf{T})\big)
+\mathcal{L}_{\mathrm{MAC}} = -y dot log f_p(\mathbf{V},\mathbf{T}) - (1-y)\,\log\!\big(1 - f_p(\mathbf{V},\mathbf{T})\big)
 $$
 
 $$
-\mathcal{L}_{\mathrm{MLM}}
-= - \log f^{T}_{p}\!\left(T_j \mid T_{<j}\right)
+\mathcal{L}_{\mathrm{MLM}} = -logf^{T}_{p}\left(T_j \mid T_{<j}\right)
 $$
 
-Furthermore, the audio-video-speech representations can be turned to captions using the BERT decoder. They are calling it VidCap.
 
-<img width="888" height="358" alt="image" src="https://github.com/user-attachments/assets/c03ab76c-0b35-4d71-8e9b-312b2b9e477d" />
+3. **Stage 3: NTP with video-centric inputs.** In this training step, the video representations are used to generate text—possibly caption or open-ended dialogue. Quite reminiscent of BLIP-2, a Q-former is attached to the video encoder, and the output is fed to an LLM. All three modules are trained jointly, for text-completion. 
 
