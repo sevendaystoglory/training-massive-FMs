@@ -77,4 +77,9 @@ InternVLForConditionalGeneration(
 The general architecture is quite similar to the InternVL model, however the InternVideo diverges as follows.
 1. Its primary encoder is a large spatio-temporal ViT video embeddings, not just a simple ViT.
 2. To process videos, InternVideo also has add positional embeddings.
-3. InternVL recipe for image context text generation is to use Qwen3, a decoder only model with visual representations prepended to textual representations after being mapped ot the same space. InternVideo uses BERT-style model with cross-attn fusion of visual and textual embeddings.  
+3. InternVL recipe for image context text generation is to use Qwen3, a decoder only model with visual representations prepended to textual representations after being mapped ot the same space. InternVideo uses BERT-style model with cross-attn fusion of visual and textual embeddings.
+
+The following figure from this [survey](https://arxiv.org/pdf/2306.13549), shows how the general architecture matches. 
+
+<img width="509" height="416" alt="image" src="https://github.com/user-attachments/assets/64326c8b-fa61-4fff-9f6c-7d54e2a8e510" />
+
