@@ -1,7 +1,7 @@
 # How is this InternVideo2 MLLM pre-trained?
 
 ## How do we pre-train LLMs, generally speaking?
-BERT-like econder-only models are pre-trained using masked language modelling (MLM) as the training objective. The encoder learns to assign bi-directional context-rich representations to the masked tokens. On the other hand, GPT-like decoder-only models are pre-trained using next token prediction (TNP) as the objetive with a C.E. loss calculated using teacher forcing. Both of these training tasks are really powerful to assign context-rich representations to tokens and to assign the next most-probable token representation correspondingly. We carry forward this analogy in the learning of spatio-temporal representations of multi-modal models. \
+BERT-like econder-only models are pre-trained using masked language modelling (MLM) as the training objective. The encoder learns to assign bi-directional context-rich representations to the masked tokens. On the other hand, GPT-like decoder-only models are pre-trained using next token prediction (TNP) as the objetive with a C.E. loss calculated using teacher forcing. Both of these training tasks are really powerful to assign context-rich representations to tokens and to assign the next most-probable token representation correspondingly. We carry forward this analogy in the learning of spatio-temporal representations of multi-modal models. <br />
 <img width="1305" height="377" alt="image" src="https://github.com/user-attachments/assets/65479e7c-721a-4154-8eb8-75f8e765e4f0" />
 
 
