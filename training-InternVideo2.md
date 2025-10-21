@@ -1,14 +1,21 @@
 # How is this InternVideo2 MLLM pre-trained?
 
 ## How do we pre-train LLMs, generally speaking?
-BERT-like econder-only models are pre-trained using masked language modelling (MLM) as the training objective. The encoder learns to assign bi-directional context-rich representations to the masked tokens. On the other hand, GPT-like decoder-only models are pre-trained using next token prediction (TNP) as the objetive with a C.E. loss calculated using teacher forcing. Both of these training tasks are really powerful to assign context-rich representations to tokens and to assign the next most-probable token representation correspondingly. We carry forward this analogy in the learning of spatio-temporal representations of multi-modal models. <br />
+BERT-like econder-only models are pre-trained using masked language modelling (MLM) as the training objective. The encoder learns to assign bi-directional context-rich representations to the masked tokens. On the other hand, GPT-like decoder-only models are pre-trained using next token prediction (TNP) as the objetive with a C.E. loss calculated using teacher forcing. Both of these training tasks are really powerful to assign context-rich representations to tokens and to assign the next most-probable token representation correspondingly. We carry forward this analogy in the learning of spatio-temporal representations of multi-modal models. <br><br>
 <img width="1305" height="377" alt="image" src="https://github.com/user-attachments/assets/65479e7c-721a-4154-8eb8-75f8e765e4f0" />
 
 
 ## InternVideo2-1B Architecture, Backbones and Modules.
 
+We load and inspect the modules of the checkpoint `OpenGVLab/InternVideo2-Stage2_1B-224p-f4`:
 
+- Apparently, this checkpoint has trained (stage 2) parameters for both the vision encoder (40 blocks) and the text encoder (24 transformers blocks of BERT large)
 
+```python
+Parameter breakdown by component:
+vision_encoder: 1,049,117,056 (1049.12M) - 72.8%
+text_encoder: 391,394,420 (391.39M) - 27.2%
+```
 
 
 ## Introducing the InternVideo2 training pipeline. Which operates in 3 stages:
@@ -23,7 +30,7 @@ where $f$ is our video encoder, and g and h are the teacher encoder ViTs. Specif
 
 After stage 1, quite a strong video encoder is trained. However, this is still not a multi-model model yet. We need to encode text, speech and audio somehow. Not only that, we also need to ensure that these learned representations across modalities are aligned! What this means is that a video and its caption should be encoded quite closely using a good pre-trained InternVideo2.
 
-2. **Stage2: Aligning Video to Audio-Speech-Text.** How we do this is done is that there already are good text/audio/speech encoders. We take the the BERT-L (19 encoder layers and 5 cross-attn decoder layers) for text and speech encoding. The audio encoder is initialized with BEATs. Good! What remains now is to align these cross-modal representations. This is done in 3 ways: A. using a contrastive loss to learn similar M-text embeddings, where $M\in\{video, audio, speech\}$. Call this $L_{CON}$; B. computing a loss $L_{MAT}$ which captures the likelihood of matching a given video $V$ with a caption $T$; C. Up until now the encoder layers of BERT-L were trained. We now unleash the cross-attn decoder of BERT. Given a video, and some of its caption, we train the BERT-L to complete the caption. This is autoregressive LM task. I don't know why they've called it masked language modelling 🤷. With this the final piece of loss is $L_{MLM}$. Henceforth, stage 2 loss is
+2. **Stage2: Aligning Video to Audio-Speech-Text.** How we do this is done is that there already are good text/audio/speech encoders. We take the the BERT-L (19 encoder layers and 5 cross-attn decoder layers) for text and speech encoding. The audio encoder is initialized with BEATs. Good! What remains now is to align these cross-modal representations. This is done in 3 ways: A. using a contrastive loss to learn similar M-text embeddings, where $M\in\{video, audio, speech\}$. Call this $L_{CON}$; B. computing a loss $L_{MAT}$ which captures the likelihood of matching a given video $V$ with a caption $T$; C. Up until now the encoder layers of BERT-L were trained. We now unleash the cross-attn decoder of BERT. Given a video, and some of its caption, we train the BERT-L to complete the caption. This is autoregressive LM task. I don't know why they've called it masked language modelling 🤷. With this the final piece of loss is $L_{MLM}$. Henceforth, stage 2 loss is: 
 
 $$
 L = L_{CON} + L_{MAT} + L_{MLM}; \quad where
@@ -51,5 +58,7 @@ $$
 $$
 
 
-3. **Stage 3: NTP with video-centric inputs.** In this training step, the video representations are used to generate text—possibly caption or open-ended dialogue. Quite reminiscent of BLIP-2, a Q-former is attached to the video encoder, and the output is fed to an LLM. All three modules are trained jointly, for text-completion. 
+3. **Stage 3: NTP with video-centric inputs.** In this training step, the video representations are used to generate text—possibly caption or open-ended dialogue. Quite reminiscent of BLIP-2, a Q-former is attached to the video encoder, and the output is fed to an LLM. All three modules are trained jointly, for text-completion.
 
+<br><br>
+PS. `We` refers to me 🫠
