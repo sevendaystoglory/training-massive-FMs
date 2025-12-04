@@ -1,7 +1,7 @@
 # Training Megatron-Turing NLG 530B
 Ref: https://arxiv.org/pdf/2201.11990
 
-Following will be my train of though as I myself learn.
+I put out my train of thought as I learn.
 
 This was the then (2022) single largest monolithic LLM. The papers rightaway states the following two challenges in training such massive LLM:
 A. How do you fit a monster of this size on a single card? Spoiler: You don't! That much is obvious - you somehow need to split the model among multiple GPUs. Do you use each card for a single block / layer (model parallelism) or for a single parameter tensor ([pipeline parallelism](https://arxiv.org/pdf/1806.03377)). How do you then account for the delays that orrurs in inter-GPU data transfer because these operations necessarily need to happen in series for inference!
